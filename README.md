@@ -1,5 +1,27 @@
-# CarND-Controls-MPC
-Self-Driving Car Engineer Nanodegree Program
+# **Self-Driving Car Engineer Nanodegree Program - *Model Predictive Controller***
+
+## Inrtoduction
+
+The goal is to build a Model Predictive Controller(MPC) to navigate a track in simulator by sending steerning angle and acceleration commands back to the simulator. 
+
+## Rubic Points
+
+### *The Model*
+
+The kinematic model which is a simplification of a dynamic model ignores tire forces, gravity, and mass, includes the vehicle's x and y coordinates, orientation angle (psi), velocity, cross-track error (cte) and psi error (epsi). Also two actuators were used, steering angle (delta, normalized to [-1, 1]) and acceleration (throttle with negative values for braking)
+
+### *Timestep Length and Elapsed Duration (N & dt)*
+
+I started with values used in quizze which were (N=25 / dt=0.05) but didn't work for me. So I tried to reducing N and increasing dt. Evetually, via trial and error, I found good result which worked fine with the model (10 / 0.1). These values mean that the optimizer is considering a one-second duration in which to determine a corrective trajectory. I tried these value pairs: (25 / 0.05), (15, 0.2), (20, 0.1).
+
+### *Polynomial Fitting and MPC Preprocessing*
+
+To make updating easier, the wayspoints were transformed to vehicle space. Then, these coordinates were used to fit a polynomial.
+
+### *Model Predictive Control with Latency*
+
+Before sending the result back to the simulator, a 100ms latency delay was implemented. This replicated the actuation delay that would be experienced in a real-world vehicle. The kinematic model calculates actuations from previous timestamp, so we should consider 100ms delay in the equation in order to overcome the vehicle lagging. If we don't take into account the delay, the vehicle will be lagged a little in its turning.
+Over all the drive around this simulator track, was smoother and lacked steering wobbles, when compared to using a PID controller.
 
 ---
 
